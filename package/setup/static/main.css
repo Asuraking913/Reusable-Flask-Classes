@@ -1,0 +1,21 @@
+@font-face {
+    font-family: poppins;
+    src: url("./Poppins-Regular.ttf");
+}
+
+body {
+    background-color: #fff1e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+h1 {
+    font-size: 3.5rem;
+    color: rgb(168, 85, 85);
+    font-family: poppins;
+}
