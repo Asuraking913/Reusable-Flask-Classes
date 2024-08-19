@@ -1,5 +1,5 @@
-from extensions import hasher
-from utils.validator import validator
+from package.setup.extensions import hasher
+from package.utils.validator import validator
 
 class UserAuth:
 

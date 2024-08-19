@@ -1,5 +1,5 @@
-from extensions import db
-from utils.get_creation import get_random_id, get_current_time, get_current_date
+from package.setup.extensions import db
+from package.utils.get_creation import get_random_id, get_current_time, get_current_date
 
 
 class User(db.Model):

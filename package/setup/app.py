@@ -1,8 +1,7 @@
 from flask import Flask
-from extensions import jwt, db
-from config import Appconfig
-from routes import root_routes
-from extensions import hasher
+from package.setup.extensions import hasher, jwt, db
+from package.setup.config import Appconfig
+from package.register_login_routes import root_routes
 
 def create_app():
 
