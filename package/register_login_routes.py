@@ -1,7 +1,6 @@
 from package.UserAuth import UserAuth
 from flask import request, redirect, render_template, jsonify, make_response
 from package.setup.models import User
-from flask_jwt_extended import create_access_token
 
 def root_routes(app):
     Auth = UserAuth()
@@ -18,6 +17,19 @@ def root_routes(app):
             
             response =  jsonify(Auth.create_user(data, User))
             return response
+        
+        return {
+            'status' : 'unsucessfull', 
+            'message' : 'Invalid Request'
+        }, 400
+    
+    @app.route("/api/login", methods=['POST'])
+    def handle_login():
+        if request.method == "POST":
+            data = request.json
+            response = make_response(jsonify(Auth.login_user(data, User)))
+            return response
+
     
     
 

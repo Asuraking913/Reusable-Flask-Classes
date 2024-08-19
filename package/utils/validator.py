@@ -31,7 +31,7 @@ def validator(data, User, user_name = False, full_credentials=False):
     """
     error = []
     #full credentials False
-    if full_credentials == False:
+    if not full_credentials:
         if user_name:
             required_fields = ['userName', 'userEmail', 'password1', 'password2']
 
@@ -40,13 +40,15 @@ def validator(data, User, user_name = False, full_credentials=False):
                     error.append({
                         'error' : f'{field} not provided'
                     })
+                return error
+                
 
             #checking password matching
-            if 'password1' and 'password2' not in data:
+            if data['password1'] != data['password2']:
+                print('event')
                 error.append({ 
                     'error' : 'Password entries do not match'
                 })
-                return error
             
             #Checking User model for existing emails
             if 'userEmail' in data:
@@ -57,32 +59,33 @@ def validator(data, User, user_name = False, full_credentials=False):
                         'status' : 'unsuccessfull', 
                         'message' : 'User Email Already exists'
                     })
-
         else:
             #Default setting
             required_fields = ['userEmail', 'password1', 'password2']
-            for field in required_fields:
+            for field in ['userEmail', 'password1', 'password2']:
+                print(field)
                 if field not in data:
+                    
                     error.append({
                         'error' : f'{field} not provided'
                     })
+                    return error
 
                 #Checking User model for existing emails
-                if 'userEmail' in data:
-                    user = User.query.filter_by(user_email = data['userEmail']).first()
-                    print(user)
-                    if user != None:
-                        error.append({
-                            'status' : 'unsuccessfull', 
-                            'message' : 'User Email Already exists'
-                        })
-                
+            if 'userEmail' in data:
+                user = User.query.filter_by(user_email = data['userEmail']).first()
+                print(user, 'event2')
+                if user != None:
+                    error.append({
+                        'status' : 'unsuccessfull', 
+                        'message' : 'User Email Already exists'
+                    })
+            
                 #checking password matching
-                if 'password1' and 'password2' not in data:
-                    error.append({ 
-                    'error' : 'Password entries do not match'
-                })
-                return error
+            if data['password1'] != data['password2']:
+                error.append({ 
+                'error' : 'Password entries do not match'
+            })
 
         
     else:
@@ -93,9 +96,11 @@ def validator(data, User, user_name = False, full_credentials=False):
                 error.append({
                         'error' : f'{field} not provided'
                     })
+                return error
+                
             
             #checking password matching
-            if 'password1' and 'password2' not in data:
+            if data['password1'] != data['password2']:
                 error.append({ 
                     'error' : 'Password entries do not match'
                 })

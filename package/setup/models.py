@@ -21,7 +21,7 @@ class User(db.Model):
     The User Class Model has method for deleting an instance from the database with the self.delete() method
     """
 
-    id = db.Column(db.String(255), nullable = False, primary_key = True, unique = True, default = get_random_id)
+    _id = db.Column(db.String(255), nullable = False, primary_key = True, unique = True, default = get_random_id)
     user_name = db.Column(db.String(255))
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))

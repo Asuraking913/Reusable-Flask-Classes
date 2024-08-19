@@ -1,5 +1,9 @@
 from package.setup.extensions import hasher
 from package.utils.validator import validator
+from package.utils.login_validator import login_validator
+from flask_jwt_extended import create_access_token, set_access_cookies
+from flask import make_response, jsonify
+
 
 class UserAuth:
 
@@ -39,7 +43,6 @@ class UserAuth:
         """
         
         error = validator(data, User, user_name = username, full_credentials=full_credentials) #handles Validation and returns appropriate http response code for invalid fields
-        print(error)
         if error != []:
             return {
             'status' : 'unsucessfull', 
@@ -72,3 +75,53 @@ class UserAuth:
         'status' : 'successfull', 
         'message' : 'Created new_user'
         }, 201
+    
+    def login_user(self, data, User, cookies = False, username = False):
+        error = login_validator(data, user_name=username)
+
+        if error != []:
+            return {
+                'status' : 'unsuccessfull',
+                'error' : error
+            }, 400
+
+        current_user = User.query.filter_by(user_email = data['userEmail']).first()
+        if current_user != None:
+            access_token = create_access_token(current_user._id)
+            if not cookies:
+                response =  make_response(jsonify({
+                    'status' : 'sucessfull', 
+                    'message' : 'User Logged in sucessfully', 
+                    "data" : {
+                        'access_token' : access_token,
+                        'userId' : current_user._id,
+                        'userName' : current_user.user_name, 
+                        'firstName' : current_user.first_name, 
+                        'lastName' : current_user.last_name, 
+                        'phone' : current_user.phone
+                    } 
+                }))
+
+                return response, 200
+            
+            response =  make_response(jsonify({
+                    'status' : 'sucessfull', 
+                    'message' : 'User Logged in sucessfully', 
+                    "data" : {
+                        'userId' : current_user._id,
+                        'userName' : current_user.user_name, 
+                        'firstName' : current_user.first_name, 
+                        'lastName' : current_user.last_name, 
+                        'phone' : current_user.phone
+                    } 
+                }))
+            
+
+            set_access_cookies(response, access_token)
+            return response, 200
+
+
+            
+
+
+            
