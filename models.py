@@ -41,4 +41,7 @@ class User(db.Model):
 
         db.session.delete(self)
         db.session.commit(self)
+    
+    def rollback(self):
+        db.session.rollback()
 
