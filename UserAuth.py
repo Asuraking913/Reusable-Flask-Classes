@@ -1,16 +1,13 @@
-from flask_bcrypt import Bcrypt
 from models import User
+from extensions import hasher
 
 class UserAuth:
 
-    hasher = Bcrypt()
-
-    def create_user(self, app, useremail, password, username = None):
+    def create_user(self, useremail, password, username = None, full_credentials = False):
 
         """
-            By Default the username parameter is equal to None, When set to a value the database stores that value as the value of the user instance
+            By Default the username parameter is equal to None, When set to a value the method sets that value to the username attribute of the user instance before sotring it
         """
-        hasher = Bcrypt(app)
 
         new_password = hasher.generate_password_hash(password)
         if username != None:
