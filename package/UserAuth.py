@@ -77,6 +77,47 @@ class UserAuth:
         }, 201
     
     def login_user(self, data, User, cookies = False, username = False):
+
+        '''
+            User:
+            Takes ther User Model as an argument and query's it for existing emails address, returns a 400 https response/status code 
+            if such email address is found
+
+
+        By default the user_name argument is set to False causing the username not to be taken into account during validation Except if set to true
+
+        By default the full_credentials argument is set to false, when set to true, Validation for other entries like
+        firsName and lastname becomes available
+
+        Valid fields should comes as...
+
+        For Default Validation
+            userEmail
+            password1 
+            password2
+        
+        For Validation with userName
+
+            userName
+            userEmail
+            password1 
+            password2
+            
+        For full credentials
+            firstName
+            lastName
+            password1
+            password2
+            phone
+        
+        The cookies argument by default is set to False...
+        this causes the jwt token to be included in the response...
+        When set to true the response does not return the token insteads includes it the cookie...
+
+        A JWT_CSRF_TOKEN token is sent to the cookies too, setting JWT_CSRF_IN_COOKIES to False disables this cookies
+        from subsequent request
+        '''
+
         error = login_validator(data, user_name=username)
 
         if error != []:
@@ -128,7 +169,7 @@ class UserAuth:
         
         return {
                     'status' : 'unsucessfull', 
-                    'message' : 'Invalid email'
+                    'message' : 'Invalid username/email'
                 }, 400
 
 
