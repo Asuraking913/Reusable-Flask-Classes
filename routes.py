@@ -1,6 +1,7 @@
 from UserAuth import UserAuth
 from flask import request, redirect, render_template
 from utils.validator import validator
+import random
 
 def root_routes(app):
     Auth = UserAuth()
@@ -14,12 +15,19 @@ def root_routes(app):
     def handle_registration():
         if request.method == "POST":
             data = request.json
-            error = validator(data)
-            if error != []:
+            error = validator(data, user_name=True)
+            if  error:
+                print('event')
+                print(error)
                 return {
                 'status' : 'unsucessfull', 
                 'error' : error 
-                }
+                }, 400
             
-            username = data['user_name']
+            
+            Auth.create_user(data=data, username=True)
+            return {
+                'status' : 'successfull', 
+                'message' : 'Created new_user'
+            }
 

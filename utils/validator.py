@@ -21,8 +21,8 @@ def validator(data, user_name = False, full_credentials=False):
             password2
             
         For full credentials
-            FirstName
-            LastName
+            firstName
+            lastName
             password1
             password2
             phone
@@ -30,6 +30,7 @@ def validator(data, user_name = False, full_credentials=False):
 
     """
     error = []
+    #full credentials False
     if full_credentials == False:
         if user_name != None:
             required_fields = ['userName', 'userEmail', 'password1', 'password2']
@@ -46,6 +47,7 @@ def validator(data, user_name = False, full_credentials=False):
                 return error
 
         else:
+            #Default setting
             required_fields = ['userEmail', 'password1', 'password2']
             for field in required_fields:
                 if field not in data:
@@ -55,7 +57,8 @@ def validator(data, user_name = False, full_credentials=False):
                 return error
         
     else:
-        required_fields = ['firstName', 'lastName', "userName" 'userEmail', 'password1', "password2", "phone"]
+        #full_credentials true
+        required_fields = ['firstName', 'lastName', "userName", 'userEmail', 'password1', "password2", "phone"]
         for field in required_fields:
             if field not in data:
                 error.append({

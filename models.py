@@ -26,6 +26,7 @@ class User(db.Model):
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
     user_email = db.Column(db.String(255), nullable = False, unique = True)
+    phone = db.Column(db.String(12))
     user_password = db.Column(db.String(255), nullable = False)
     time_created = db.Column(db.String(255), nullable = False, default = get_current_time)
     date_created = db.Column(db.String(255), nullable = False, default = get_current_date)
