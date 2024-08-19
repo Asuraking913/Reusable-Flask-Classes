@@ -27,8 +27,12 @@ def root_routes(app):
     def handle_login():
         if request.method == "POST":
             data = request.json
-            response = make_response(jsonify(Auth.login_user(data, User)))
+            response = Auth.login_user(data, User, cookies=True)
             return response
+        return {
+            'status' : 'unsucessfull', 
+            'message' : 'Invalid Request'
+        }, 400
 
     
     

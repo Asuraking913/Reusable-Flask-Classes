@@ -87,38 +87,49 @@ class UserAuth:
 
         current_user = User.query.filter_by(user_email = data['userEmail']).first()
         if current_user != None:
-            access_token = create_access_token(current_user._id)
-            if not cookies:
-                response =  make_response(jsonify({
-                    'status' : 'sucessfull', 
-                    'message' : 'User Logged in sucessfully', 
-                    "data" : {
-                        'access_token' : access_token,
-                        'userId' : current_user._id,
-                        'userName' : current_user.user_name, 
-                        'firstName' : current_user.first_name, 
-                        'lastName' : current_user.last_name, 
-                        'phone' : current_user.phone
-                    } 
-                }))
+            if hasher.check_password_hash(current_user.user_password, data['password']):
+                access_token = create_access_token(current_user._id)
+                if not cookies:
+                    response =  make_response(jsonify({
+                        'status' : 'sucessfull', 
+                        'message' : 'User Logged in sucessfully', 
+                        "data" : {
+                            'access_token' : access_token,
+                            'userId' : current_user._id,
+                            'userName' : current_user.user_name, 
+                            'firstName' : current_user.first_name, 
+                            'lastName' : current_user.last_name, 
+                            'phone' : current_user.phone
+                        } 
+                    }))
 
+                    return response, 200
+            
+                response =  make_response(jsonify({
+                        'status' : 'sucessfull', 
+                        'message' : 'User Logged in sucessfully', 
+                        "data" : {
+                            'userId' : current_user._id,
+                            'userName' : current_user.user_name, 
+                            'firstName' : current_user.first_name, 
+                            'lastName' : current_user.last_name, 
+                            'phone' : current_user.phone
+                        } 
+                    }))
+
+
+                set_access_cookies(response, access_token)
                 return response, 200
             
-            response =  make_response(jsonify({
-                    'status' : 'sucessfull', 
-                    'message' : 'User Logged in sucessfully', 
-                    "data" : {
-                        'userId' : current_user._id,
-                        'userName' : current_user.user_name, 
-                        'firstName' : current_user.first_name, 
-                        'lastName' : current_user.last_name, 
-                        'phone' : current_user.phone
-                    } 
-                }))
-            
-
-            set_access_cookies(response, access_token)
-            return response, 200
+            return {
+                    'status' : 'unsucessfull', 
+                    'message' : 'Incorrect password'
+                }, 400
+        
+        return {
+                    'status' : 'unsucessfull', 
+                    'message' : 'Invalid email'
+                }, 400
 
 
             
